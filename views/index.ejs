@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dPlayer</title>
+
+  <link rel="stylesheet" href="/assets/index.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.8.1/dist/cdn.min.js" defer></script>
+
+  <style>
+    /* Custom scrollbar styles */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #4b5563 #2d3748;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #2d3748;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #4b5563;
+      border-radius: 8px;
+      border: 2px solid #2d3748;
+    }
+  </style>
+
+  <!-- https://www.freeiconspng.com/uploads/player-icon-0.png -->
+  <link rel="icon" href="https://www.freeiconspng.com/uploads/player-icon-0.png" />
+
+</head>
+
+<body class="flex h-screen bg-gray-800 text-gray-200">
+  <% const selectedVideo = 'Video Name' %>
+
+  <aside class="overflow-y-auto w-[25%] shrink-0 border-r border-gray-700">
+    <!-- render list of videos based on type if its dir or file -->
+    <% function renderVideos(videos) { %> <% videos.forEach(function({ name,
+      type, path, videos }) { %> <% if (type === 'dir') { %>
+
+    <div x-data="{ open: false  }">
+      <button @click="open = !open"
+        class="w-full rounded-lg flex items-center justify-between text-left p-2 hover:bg-gray-700">
+        <span class='truncate mr-4'><%= name %></span>
+        <span class='text-gray-600 h-4 w-4'>
+          <svg x-show="open" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none"
+            viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m19 9-7 7-7-7" />
+          </svg>
+          <svg x-show="!open" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none"
+            viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m9 5 7 7-7 7" />
+          </svg>
+        </span>
+      </button>
+      <div x-show="open" class="pl-4"><%- renderVideos(videos) %></div>
+    </div>
+
+    <% } else { %>
+
+    <button onclick="selectVideo('<%= name %>', '<%= path %>')"
+      class="w-full truncate rounded-lg text-left p-2 hover:bg-gray-700">
+      <span> <%= name %> </span>
+    </button>
+
+    <% } %> <% }); %> <% } %>
+
+    <div class="p-4">
+      <h1 class="text-2xl font-bold">Videos</h1>
+      <div class="mt-4"><%- renderVideos(videos) %></div>
+    </div>
+  </aside>
+
+  <main class="px-16 py-4 w-full">
+    <h1 class="text-2xl font-bold mb-8" id='video-title'></h1>
+
+    <video id="video-player" autoplay controls class="w-full rounded-lg shadow-lg">
+      <source id="video-source" src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </main>
+
+  <script>
+    function selectVideo(name, path) {
+      document.getElementById('video-title').innerText = name;
+      const videoElement = document.getElementById('video-player');
+      const sourceElement = document.getElementById('video-source');
+      sourceElement.src = path;
+      videoElement.load();
+      videoElement.focus();
+    }
+  </script>
+</body>
+
+</html>
