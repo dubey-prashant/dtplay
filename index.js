@@ -1,4 +1,4 @@
-//  take filepath as input and render a player based on folder structure and video files of that location
+#!/usr/bin/env node
 
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +8,7 @@ const app = express();
 // Get the directory path from command line argument
 const rootDirPath = process.argv[2];
 
-console.log(process.argv);
+// console.log(process.argv);
 
 if (!rootDirPath) {
   console.error('Please provide a directory path');
@@ -20,11 +20,19 @@ if (!fs.existsSync(rootDirPath)) {
   process.exit(1);
 }
 
-app.use('/', express.static(path.join(__dirname, rootDirPath)));
+app.use('/', express.static(rootDirPath));
 app.use('/assets', express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.listen(8454, () => console.log('Server running on port 8454!'));
+app.listen(8454, () => {
+  const underline = '\x1b[4m';
+  const reset = '\x1b[0m';
+  const url = 'http://localhost:8454';
+  console.log('\n===================================================\n');
+  console.log(`  dPlayer is running at ${underline}${url}${reset}`);
+  console.log('\n===================================================\n');
+});
 
 const createVideos = (dirPath) => {
   const pathContents = fs.readdirSync(dirPath);
@@ -72,8 +80,6 @@ const createVideos = (dirPath) => {
 };
 
 const videos = createVideos(rootDirPath);
-
-// console.log(videos);
 
 app.get('/', (req, res) => {
   res.render('index', { videos });
