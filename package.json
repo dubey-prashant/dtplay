@@ -1,25 +1,51 @@
 {
-  "name": "dplayer",
+  "name": "dplay",
   "version": "1.0.0",
-  "description": "A CLI tool and server to browse and play videos from a folder structure.",
+  "description": "A modern CLI tool and web server to browse and play videos from any folder structure with an elegant UI",
   "main": "index.js",
   "keywords": [
     "video",
     "player",
     "cli",
     "server",
-    "streaming"
+    "streaming",
+    "web-player",
+    "video-browser",
+    "folder-viewer",
+    "media-server",
+    "video-streaming"
   ],
   "bin": {
-    "dplayer": "index.js"
+    "dplay": "index.js"
   },
-  "author": "Prashant Dubey",
+  "author": "Prashant Dubey <dubey.prashant@outlook.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dubey-prashant/dplay.git"
+  },
+  "homepage": "https://github.com/dubey-prashant/dplay#readme",
+  "bugs": {
+    "url": "https://github.com/dubey-prashant/dplay/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "build-css": "tailwindcss -i ./input.css -o ./public/index.css --watch"
+  },
   "dependencies": {
     "express": "^4.18.2",
     "ejs": "^3.1.9"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.15"
-  }
+  },
+  "files": [
+    "index.js",
+    "views/",
+    "public/",
+    "README.md"
+  ]
 }
