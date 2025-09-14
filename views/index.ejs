@@ -142,6 +142,10 @@
             <kbd class="px-2 py-1 bg-gray-700 rounded text-xs">←→</kbd>
             <span>Seek</span>
           </div>
+           <div class="flex items-center gap-2">
+            <kbd class="px-2 py-1 bg-gray-700 rounded text-xs">↑↓</kbd>
+            <span>Volume</span>
+          </div>
           <div class="flex items-center gap-2">
             <kbd class="px-2 py-1 bg-gray-700 rounded text-xs">F</kbd>
             <span>Fullscreen</span>
@@ -240,6 +244,32 @@
           </div>
         </div>
       </div>
+
+      <!-- Keyboard Shortcuts (shown when video is playing) -->
+      <div id="keyboard-shortcuts" style="display: none;" class="mt-6 text-center">
+        <div class="flex flex-wrap justify-center gap-4 text-xs text-gray-500">
+          <div class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">Space</kbd>
+            <span>Play/Pause</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">←→</kbd>
+            <span>Seek ±10s</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">↑↓</kbd>
+            <span>Volume</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">F</kbd>
+            <span>Fullscreen</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">M</kbd>
+            <span>Mute</span>
+          </div>
+        </div>
+      </div>
   </main>
 
   <script>
@@ -252,6 +282,7 @@
       document.getElementById('video-subtitle').innerText = path;
       document.getElementById('select-message').style.display = 'none';
       document.getElementById('player-container').style.display = 'block';
+      document.getElementById('keyboard-shortcuts').style.display = 'block';
 
       // Show loading state
       const loadingElement = document.getElementById('video-loading');
@@ -266,6 +297,14 @@
       videoElement.addEventListener('loadeddata', () => {
         loadingElement.style.display = 'none';
         videoElement.focus();
+        
+        // Restore saved playback speed
+        const savedSpeed = localStorage.getItem('playback-speed') || '1';
+        videoElement.playbackRate = parseFloat(savedSpeed);
+        const speedSelect = document.getElementById('playback-speed');
+        if (speedSelect) {
+          speedSelect.value = savedSpeed;
+        }
       }, { once: true });
 
       // Handle loading errors
@@ -720,7 +759,10 @@
 
       // Playback speed
       playbackSpeed.addEventListener('change', () => {
-        video.playbackRate = parseFloat(playbackSpeed.value);
+        const speed = playbackSpeed.value;
+        video.playbackRate = parseFloat(speed);
+        // Save playback speed to localStorage
+        localStorage.setItem('playback-speed', speed);
       });
 
       // Fullscreen
