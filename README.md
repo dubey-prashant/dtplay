@@ -1,10 +1,23 @@
-# dtplay
+# dtplay 🎬
 
-_Modern CLI tool and web server for streaming video content with an elegant, responsive interface_
+**A lightweight web-based video player for your local video collection**
+
+dtplay transforms any folder containing videos into a beautiful web-based media center. Simply point it at your video directory, and it creates a local web server with a clean interface to browse, search, and play your videos from any device on your network.
 
 [![npm version](https://badge.fury.io/js/dtplay.svg)](https://badge.fury.io/js/dtplay)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-14%2B-green.svg)](https://nodejs.org/)
+
+## What it does
+
+- **Browse your video folders** - Automatically organizes your local video files
+- **Web-based player** - Play videos in your browser with custom controls
+- **Search & filter** - Quickly find videos across nested folders
+- **Any device access** - Watch on phone, tablet, or computer via web browser
+- **Remember progress** - Resume videos where you left off
+- **Network streaming** - Access your videos from any device on your local network
+
+Perfect for organizing personal video collections, home media servers, or sharing videos across devices without cloud storage.
 
 ## Quick Start
 
