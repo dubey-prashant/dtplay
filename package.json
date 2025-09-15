@@ -1,6 +1,6 @@
 {
-  "name": "dplay",
-  "version": "1.0.0",
+  "name": "dtplay",
+  "version": "1.0.2",
   "description": "A modern CLI tool and web server to browse and play videos from any folder structure with an elegant UI",
   "main": "index.js",
   "keywords": [
@@ -16,17 +16,17 @@
     "video-streaming"
   ],
   "bin": {
-    "dplay": "index.js"
+    "dtplay": "index.js"
   },
   "author": "Prashant Dubey <dubey.prashant@outlook.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dubey-prashant/dplay.git"
+    "url": "git+https://github.com/dubey-prashant/dtplay.git"
   },
-  "homepage": "https://github.com/dubey-prashant/dplay#readme",
+  "homepage": "https://github.com/dubey-prashant/dtplay#readme",
   "bugs": {
-    "url": "https://github.com/dubey-prashant/dplay/issues"
+    "url": "https://github.com/dubey-prashant/dtplay/issues"
   },
   "engines": {
     "node": ">=14.0.0"

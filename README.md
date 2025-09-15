@@ -1,26 +1,17 @@
-# dplay 🎬
+# dtplay
 
-A modern CLI tool and web server to browse and play videos from any folder structure with an elegant, responsive UI.
+_Modern CLI tool and web server for streaming video content with an elegant, responsive interface_
 
-## ✨ Features
+[![npm version](https://badge.fury.io/js/dtplay.svg)](https://badge.fury.io/js/dtplay)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-14%2B-green.svg)](https://nodejs.org/)
 
-- **🚀 Zero Configuration**: Just point to a folder and start watching
-- **🎥 Universal Video Support**: Plays all common video formats (MP4, AVI, MKV, etc.)
-- **📱 Responsive Design**: Beautiful UI that works on desktop, tablet, and mobile
-- **🔍 Smart Search**: Real-time search with auto-expanding folders
-- **⌨️ Keyboard Shortcuts**: Full keyboard control (Space, F, M, Arrow keys)
-- **💾 Progress Tracking**: Remembers where you left off in each video
-- **📚 Recently Played**: Quick access to your recently watched videos
-- **🎛️ Custom Controls**: Volume control, playback speed, fullscreen
-- **📁 Nested Folder Support**: Handles complex directory structures
-- **🖱️ Click to Play**: Click anywhere on video to play/pause
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
 ```bash
-npm install -g dplay
+npm install -g dtplay
 ```
 
 ### Usage
@@ -28,18 +19,31 @@ npm install -g dplay
 Navigate to any folder containing videos and run:
 
 ```bash
-dplay /path/to/your/videos
+dtplay /path/to/your/videos
 ```
 
 Or use current directory:
 
 ```bash
-dplay .
+dtplay .
 ```
 
 Then open your browser to `http://localhost:8454`
 
-## 🎮 Controls
+## Features
+
+- **Zero Configuration**: Just point to a folder and start watching
+- **Universal Video Support**: Plays all common video formats (MP4, AVI, MKV, etc.)
+- **Responsive Design**: Beautiful UI that works on desktop, tablet, and mobile
+- **Smart Search**: Real-time search with auto-expanding folders
+- **Keyboard Shortcuts**: Full keyboard control (Space, F, M, Arrow keys)
+- **Progress Tracking**: Remembers where you left off in each video
+- **Recently Played**: Quick access to your recently watched videos
+- **Custom Controls**: Volume control, playback speed, fullscreen
+- **Nested Folder Support**: Handles complex directory structures
+- **Click to Play**: Click anywhere on video to play/pause
+
+## Controls
 
 ### Keyboard Shortcuts
 
@@ -55,18 +59,18 @@ Then open your browser to `http://localhost:8454`
 - **Click progress bar**: Seek to position
 - **Scroll on volume**: Adjust volume
 
-## 📋 Requirements
+## Requirements
 
 - Node.js 14.0.0 or higher
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 
-## 🛠️ Development
+## Development
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/dubey-prashant/dplay.git
-cd dplay
+git clone https://github.com/dubey-prashant/dtplay.git
+cd dtplay
 npm install
 ```
 
@@ -82,10 +86,10 @@ Start the server:
 npm start /path/to/videos
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-dplay/
+dtplay/
 ├── index.js          # Main CLI entry point
 ├── views/
 │   └── index.ejs     # Web UI template
@@ -95,19 +99,9 @@ dplay/
 └── package.json
 ```
 
-## 🎨 UI Features
+## Configuration
 
-- **Dark Theme**: Easy on the eyes for extended viewing
-- **Folder Navigation**: Expandable/collapsible folder tree
-- **Video Thumbnails**: Visual indicators for video files
-- **Progress Indicators**: Visual progress bars for watched videos
-- **Path Display**: Shows full file paths for context
-- **Loading States**: Smooth loading animations
-- **Responsive Layout**: Adapts to any screen size
-
-## 🔧 Configuration
-
-dplay works out of the box with no configuration needed. Simply point it to any folder containing videos.
+dtplay works out of the box with no configuration needed. Simply point it to any folder containing videos.
 
 ### Supported Video Formats
 
@@ -118,18 +112,18 @@ dplay works out of the box with no configuration needed. Simply point it to any 
 - MKV (if browser supports)
 - MOV (if browser supports)
 
-## 📝 License
+## License
 
 MIT © [Prashant Dubey](https://github.com/dubey-prashant)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 🐛 Issues
+## Issues
 
-Found a bug or have a feature request? Please open an issue on [GitHub](https://github.com/dubey-prashant/dplay/issues).
+Found a bug or have a feature request? Please open an issue on [GitHub](https://github.com/dubey-prashant/dtplay/issues).
 
-## 🌟 Show Your Support
+## Show Your Support
 
 Give a ⭐️ if this project helped you!
