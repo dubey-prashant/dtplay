@@ -41,7 +41,13 @@ Or use current directory:
 dtplay .
 ```
 
-Then open your browser to `http://localhost:8454`
+**Custom Port**: Use the `-p` flag to specify a different port:
+
+```bash
+dtplay /path/to/your/videos -p 3000
+```
+
+Then open your browser to `http://localhost:8454` (or your custom port)
 
 ## Features
 
@@ -115,6 +121,19 @@ dtplay/
 ## Configuration
 
 dtplay works out of the box with no configuration needed. Simply point it to any folder containing videos.
+
+### Command Line Options
+
+- **Directory**: First argument specifies the video directory path
+- **`-p <port>`**: Set custom port (default: 8454)
+
+**Examples:**
+
+```bash
+dtplay /path/to/videos              # Default port 8454
+dtplay /path/to/videos -p 3000      # Custom port 3000
+dtplay . -p 8080                    # Current directory, port 8080
+```
 
 ### Supported Video Formats
 

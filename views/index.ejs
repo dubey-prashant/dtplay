@@ -16,12 +16,43 @@
   <link rel="icon" href="/assets/favicon.png" />
 </head>
 
-<body class="flex h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 font-sans">
+<body x-data="{ 
+  sidebarOpen: false, 
+  isMobile: window.innerWidth < 768,
+  init() {
+    this.$watch('isMobile', () => {
+      if (!this.isMobile) this.sidebarOpen = false;
+    });
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+    });
+  }
+}" class="flex h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 font-sans overflow-hidden">
   <% const selectedVideo = 'Video Name' %>
 
-  <aside class="overflow-y-auto w-[25%] shrink-0 border-r border-gray-700 bg-gray-900">
+  <!-- Mobile Menu Button -->
+  <button @click="sidebarOpen = !sidebarOpen" 
+    x-show="isMobile"
+    class="fixed top-4 right-4 z-50 p-2 bg-gray-800 border border-gray-600 rounded-lg text-white hover:bg-gray-700 transition-colors md:hidden">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+
+  <!-- Sidebar -->
+  <aside 
+    x-show="!isMobile || sidebarOpen"
+    @click.away="isMobile && (sidebarOpen = false)"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="transform -translate-x-full"
+    x-transition:enter-end="transform translate-x-0"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="transform translate-x-0"
+    x-transition:leave-end="transform -translate-x-full"
+    class="overflow-y-auto w-full md:w-[25%] shrink-0 border-r border-gray-700 bg-gray-900 fixed md:relative z-40 h-full md:h-screen"
+    :class="isMobile ? 'fixed inset-0 w-full' : 'md:w-[25%]'">
     <div class="p-4">
-      <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center justify-between mb-6 pt-4 md:pt-0">
         <h1 class="text-2xl font-bold text-white">dPlayer</h1>
         <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
           <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -94,7 +125,7 @@
       </div>
       <% } else { %>
       <div class="video-item video-file" data-name="<%= name.toLowerCase() %>" data-type="video">
-        <button onclick="selectVideo('<%= name %>', '<%= path %>')"
+        <button onclick="selectVideo('<%= name %>', '<%= path %>'); if(window.innerWidth < 768) { document.querySelector('[x-data]').__x.$data.sidebarOpen = false; }"
           class="w-full rounded-lg text-left p-3 hover:bg-gray-800/50 hover:border-blue-600/50 border border-transparent transition-all group video-card"
           data-path="<%= path %>">
           <div class="flex items-center gap-2">
@@ -116,12 +147,14 @@
     <% } %>
   </aside>
 
-  <main class="px-8 py-6 w-full bg-gray-850 min-h-screen">
-    <div class="max-w-6xl mx-auto">
+  <!-- Main Content -->
+  <main class="px-4 md:px-8 py-6 w-full bg-gray-850 min-h-screen pt-6"
+    :class="isMobile && sidebarOpen ? 'blur-sm' : ''">
+    <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-2 text-white" id="video-title">Welcome to dPlayer</h1>
-        <p class="text-gray-400" id="video-subtitle">Select a video from the sidebar to start watching</p>
+      <div class="mb-6 md:mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold mb-2 text-white" id="video-title">Welcome to dPlayer</h1>
+        <p class="text-sm md:text-base text-gray-400" id="video-subtitle">Select a video from the sidebar to start watching</p>
       </div>
 
       <!-- Welcome State -->
@@ -156,8 +189,9 @@
           </div>
         </div>
       </div>
-      <div id="player-container" style="display: none" class="relative">
-        <video id="video-player" autoplay class="w-full rounded-lg shadow-lg bg-black" preload="metadata">
+      <div id="player-container" style="display: none" class="relative w-full">
+        <video id="video-player" autoplay class="w-full h-auto rounded-lg shadow-lg bg-black" preload="metadata" 
+          style="max-height: 70vh; min-height: 200px;" playsinline>
           <source id="video-source" src="" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
@@ -174,56 +208,56 @@
         </div>
 
         <div id="video-controls"
-          class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 rounded-b-lg">
+          class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 md:p-4 rounded-b-lg">
           <!-- Progress Bar -->
-          <div class="mb-3">
-            <div class="flex items-center gap-2 text-sm text-white">
-              <span id="current-time" aria-label="Current time">00:00</span>
+          <div class="mb-1 md:mb-3">
+            <div class="flex items-center gap-1 md:gap-2 text-xs md:text-sm text-white">
+              <span id="current-time" aria-label="Current time" class="text-xs md:text-sm">00:00</span>
               <div class="flex-1 relative">
                 <input type="range" id="progress-bar"
-                  class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer" min="0" max="100" value="0"
+                  class="w-full h-1 md:h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer" min="0" max="100" value="0"
                   aria-label="Video progress"
                   style="background: linear-gradient(to right, #3b82f6 0%, #3b82f6 0%, #4b5563 0%, #4b5563 100%);" />
               </div>
-              <span id="duration" aria-label="Total duration">00:00</span>
+              <span id="duration" aria-label="Total duration" class="text-xs md:text-sm">00:00</span>
             </div>
           </div>
 
           <!-- Control Buttons -->
-          <div class="flex items-center justify-between flex-col-mobile gap-1-mobile">
-            <div class="flex items-center gap-3">
+          <div class="flex items-center justify-between gap-2 md:gap-3">
+            <div class="flex items-center gap-2 md:gap-3">
               <button id="play-pause-btn"
                 class="text-white hover:text-blue-400 transition-colors focus:ring-2 focus:ring-blue-500 rounded"
                 aria-label="Play or pause video">
-                <svg id="play-icon" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <svg id="play-icon" class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
-                <svg id="pause-icon" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24">
+                <svg id="pause-icon" class="w-6 h-6 md:w-8 md:h-8 hidden" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                 </svg>
               </button>
 
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1 md:gap-2">
                 <button id="volume-btn"
                   class="text-white hover:text-blue-400 transition-colors focus:ring-2 focus:ring-blue-500 rounded"
                   aria-label="Toggle mute">
-                  <svg id="volume-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <svg id="volume-icon" class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path
                       d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
                   </svg>
-                  <svg id="mute-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                  <svg id="mute-icon" class="w-5 h-5 md:w-6 md:h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
                     <path
                       d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
                   </svg>
                 </button>
-                <input type="range" id="volume-slider" class="w-20 h-2 rounded-lg appearance-none cursor-pointer"
+                <input type="range" id="volume-slider" class="w-12 sm:w-16 md:w-20 h-1 md:h-2 rounded-lg appearance-none cursor-pointer"
                   style="background: #4b5563;" min="0" max="100" value="100" aria-label="Volume control" />
               </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 md:gap-3">
               <select id="playback-speed"
-                class="bg-gray-700 text-white text-sm rounded px-2 py-1 border-none focus:ring-2 focus:ring-blue-500"
+                class="bg-gray-700 text-white text-xs md:text-sm rounded px-1 md:px-2 py-0.5 md:py-1 border-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Playback speed">
                 <option value="0.5">0.5x</option>
                 <option value="0.75">0.75x</option>
@@ -236,7 +270,7 @@
               <button id="fullscreen-btn"
                 class="text-white hover:text-blue-400 transition-colors focus:ring-2 focus:ring-blue-500 rounded"
                 aria-label="Toggle fullscreen">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
                 </svg>
               </button>
@@ -247,14 +281,16 @@
 
       <!-- Keyboard Shortcuts (shown when video is playing) -->
       <div id="keyboard-shortcuts" style="display: none;" class="mt-6 text-center">
-        <div class="flex flex-wrap justify-center gap-4 text-xs text-gray-500">
+        <div class="flex flex-wrap justify-center gap-2 md:gap-4 text-xs text-gray-500">
           <div class="flex items-center gap-1">
             <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">Space</kbd>
-            <span>Play/Pause</span>
+            <span class="hidden sm:inline">Play/Pause</span>
+            <span class="sm:hidden">Play</span>
           </div>
           <div class="flex items-center gap-1">
             <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">←→</kbd>
-            <span>Seek ±10s</span>
+            <span class="hidden sm:inline">Seek ±10s</span>
+            <span class="sm:hidden">Seek</span>
           </div>
           <div class="flex items-center gap-1">
             <kbd class="px-1.5 py-0.5 bg-gray-700/50 rounded text-xs">↑↓</kbd>
@@ -269,6 +305,14 @@
             <span>Mute</span>
           </div>
         </div>
+      </div>
+
+      <!-- Network Access Info -->
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-gray-500 px-2">
+        <span class="opacity-75">Network access:</span>
+        <code class="bg-gray-800/50 px-2 py-1 rounded text-gray-400 font-mono text-xs hover:bg-gray-800/70 transition-colors cursor-pointer select-all break-all">
+          <%= networkInfo.networkUrl %>
+        </code>
       </div>
   </main>
 
@@ -849,6 +893,26 @@
 
       // Load recent videos on page load
       updateRecentVideosList();
+
+      // Copy URL functionality
+      const copyButton = document.getElementById('copy-url');
+      if (copyButton) {
+        copyButton.addEventListener('click', () => {
+          const networkUrl = document.getElementById('network-url').textContent;
+          navigator.clipboard.writeText(networkUrl).then(() => {
+            // Show success feedback
+            const originalIcon = copyButton.innerHTML;
+            copyButton.innerHTML = `
+              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+            `;
+            setTimeout(() => {
+              copyButton.innerHTML = originalIcon;
+            }, 2000);
+          });
+        });
+      }
 
 
     });
