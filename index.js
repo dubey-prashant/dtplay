@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const express = require('express');
-const { gateway4sync } = require('default-gateway');
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import express from 'express';
+import { gateway4sync } from 'default-gateway';
 const app = express();
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const port = process.argv.includes('-p')
   ? parseInt(process.argv[process.argv.indexOf('-p') + 1]) || 8454
