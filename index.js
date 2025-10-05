@@ -4,16 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const express = require('express');
+const { gateway4sync } = require('default-gateway');
 const app = express();
 
 const port = process.argv.includes('-p')
   ? parseInt(process.argv[process.argv.indexOf('-p') + 1]) || 8454
   : 8454;
-
-const localIP = getLocalNetworkIP();
-const localUrl = `http://localhost:${port}`;
-const networkUrl =
-  localIP !== 'localhost' ? `http://${localIP}:${port}` : 'Not available';
 
 // Get the directory path from command line argument
 const rootDirPath = process.argv[2];
@@ -91,26 +87,33 @@ app.get('/', (req, res) => {
   });
 });
 
+// server setup
+const localUrl = `http://localhost:${port}`;
+const networkUrl = getLocalNetworkURL();
+
 app.listen(port, '0.0.0.0', () => {
   const underline = '\x1b[4m';
   const reset = '\x1b[0m';
   console.log('\n===================================================\n');
   console.log(`  dPlayer is running at:`);
   console.log(`  Local: ${underline}${localUrl}${reset}`);
-  if (networkUrl !== 'Not available') {
+  if (networkUrl) {
     console.log(`  Network: ${underline}${networkUrl}${reset}`);
   }
   console.log('\n===================================================\n');
 });
 
-function getLocalNetworkIP() {
+function getLocalNetworkURL() {
+  const { int } = gateway4sync();
   const interfaces = os.networkInterfaces();
-  for (const name of Object.keys(interfaces)) {
-    for (const interface of interfaces[name]) {
-      if (interface.family === 'IPv4' && !interface.internal) {
-        return interface.address;
-      }
-    }
+  const ifaceList = interfaces[int];
+  if (!ifaceList) {
+    throw new Error(`Interface ${int} not found`);
   }
-  return 'localhost';
+
+  const ipv4 = ifaceList.find(
+    (iface) => iface.family === 'IPv4' && !iface.internal
+  );
+
+  return ipv4?.address && `http://${ipv4?.address}:${port}`;
 }
