@@ -1,6 +1,6 @@
 {
   "name": "dtplay",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A modern CLI tool and web server to browse and play videos from any folder structure with an elegant UI",
   "main": "index.js",
   "keywords": [

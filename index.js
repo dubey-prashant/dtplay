@@ -7,7 +7,10 @@ import express from 'express';
 import { gateway4sync } from 'default-gateway';
 const app = express();
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const port = process.argv.includes('-p')
   ? parseInt(process.argv[process.argv.indexOf('-p') + 1]) || 8454
@@ -78,20 +81,18 @@ const createVideos = (dirPath) => {
 
 const videos = createVideos(rootDirPath);
 
+// server setup
+const localUrl = `http://localhost:${port}`;
+const networkUrl = getLocalNetworkURL();
+
 app.get('/', (req, res) => {
   res.render('index', {
     videos,
     networkInfo: {
-      localUrl,
       networkUrl,
-      ip: localIP,
     },
   });
 });
-
-// server setup
-const localUrl = `http://localhost:${port}`;
-const networkUrl = getLocalNetworkURL();
 
 app.listen(port, '0.0.0.0', () => {
   const underline = '\x1b[4m';
