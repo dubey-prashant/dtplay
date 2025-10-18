@@ -2,9 +2,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import os from 'os';
 import express from 'express';
-import { gateway4sync } from 'default-gateway';
+import { v4DefaultGateway } from 'network-default-gateway';
 const app = express();
 
 import { fileURLToPath } from 'url';
@@ -58,7 +57,7 @@ const createVideos = (dirPath) => {
         ];
       } else {
         const ext = content.split('.').pop();
-        if (!['mp4', 'mkv', 'avi'].includes(ext)) {
+        if (!['mp4', 'mkv', 'avi', 'mov'].includes(ext)) {
           return prev;
         }
 
@@ -83,7 +82,7 @@ const videos = createVideos(rootDirPath);
 
 // server setup
 const localUrl = `http://localhost:${port}`;
-const networkUrl = getLocalNetworkURL();
+const networkUrl = await getLocalNetworkURL();
 
 app.get('/', (req, res) => {
   res.render('index', {
@@ -106,17 +105,11 @@ app.listen(port, '0.0.0.0', () => {
   console.log('\n===================================================\n');
 });
 
-function getLocalNetworkURL() {
-  const { int } = gateway4sync();
-  const interfaces = os.networkInterfaces();
-  const ifaceList = interfaces[int];
-  if (!ifaceList) {
-    throw new Error(`Interface ${int} not found`);
+async function getLocalNetworkURL() {
+  try {
+    const { ip } = await v4DefaultGateway();
+    return ip && `http://${ip}:${port}`;
+  } catch (error) {
+    console.error('Error getting network URL:', error.message);
   }
-
-  const ipv4 = ifaceList.find(
-    (iface) => iface.family === 'IPv4' && !iface.internal
-  );
-
-  return ipv4?.address && `http://${ipv4?.address}:${port}`;
 }
